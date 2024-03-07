@@ -22,7 +22,12 @@ app.use(express.json());
 let browser;
 puppeteer.launch({
     headless: true,
-    args: ['--disable-dev-shm-usage'],
+    executablePath: '/usr/bin/chromium-browser',
+    args: [
+        '--headless',
+        '--disable-gpu',
+        '--disable-dev-shm-usage'
+    ],
 })
     .then(b => {
         logger.info('Puppeteer browser launched');

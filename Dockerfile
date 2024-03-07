@@ -1,8 +1,16 @@
-FROM --platform=linux/amd64 node:21.6.2-alpine3.19
+FROM node:21-alpine
 
-RUN apk add --no-cache curl
+ENV CHROME_BIN="/usr/bin/chromium-browser" \
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD="true"
 
-RUN adduser --disabled-password --home /home/puppet_pdf puppet_pdf
+RUN apk upgrade && \
+    apk add --update --no-cache \
+    curl \
+    gcompat \
+    chromium \
+    udev \
+    ttf-freefont \
+    && adduser --disabled-password --home /home/puppet_pdf puppet_pdf
 
 WORKDIR /app
 
@@ -12,12 +20,12 @@ RUN npm install
 
 COPY src ./src
 
-EXPOSE 3000
-
-HEALTHCHECK CMD curl --fail http://localhost:3000 || exit 1
-
 USER puppet_pdf
 
-RUN npx puppeteer browsers install chrome
+# RUN npx puppeteer browsers install chrome
+
+HEALTHCHECK CMD curl --fail http://localhost:3000/health || exit 1
+
+EXPOSE 3000
 
 CMD ["node", "./src/main.js"]
