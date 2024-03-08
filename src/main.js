@@ -26,7 +26,8 @@ puppeteer.launch({
     args: [
         '--headless',
         '--disable-gpu',
-        '--disable-dev-shm-usage'
+        '--disable-dev-shm-usage',
+        '--no-sandbox', // For testing purposes
     ],
 })
     .then(b => {
