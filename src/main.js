@@ -42,6 +42,29 @@ app.post('/print', async (req, res) => {
     const start = new Date().getTime();
 
     const data = req.body;
+    // const template = handlebars.compile(data.template);
+    // const html = data.html; // template(data.values);
+
+    const page = await browser.newPage();
+    await page.setContent(data.html);
+    const pdf = await page.pdf({format: 'A4'});
+    await page.close();
+
+    const end = new Date().getTime();
+    logger.info(`PDF generated in ${end - start}ms`);
+
+    res.writeHead(200, {
+        'Content-Type': 'application/pdf',
+        'Content-disposition': 'attachment;filename=out.pdf',
+        'Content-Length': pdf.length,
+    });
+    res.end(pdf);
+});
+
+app.post('/render', async (req, res) => {
+    const start = new Date().getTime();
+
+    const data = req.body;
     const template = handlebars.compile(data.template);
     const html = template(data.values);
 
