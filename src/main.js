@@ -17,7 +17,10 @@ const host = '0.0.0.0'
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({
+    limit: '10mb',
+    type: 'application/json',
+}));
 
 let browser;
 puppeteer.launch({
