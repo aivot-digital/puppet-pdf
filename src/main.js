@@ -45,12 +45,20 @@ app.post('/print', async (req, res) => {
     const start = new Date().getTime();
 
     const data = req.body;
-    // const template = handlebars.compile(data.template);
-    // const html = data.html; // template(data.values);
 
     const page = await browser.newPage();
     await page.setContent(data.html);
-    const pdf = await page.pdf({format: 'A4'});
+    const pdf = await page.pdf({
+        format: 'A4',
+        margin: {
+            top: '20mm',
+            right: '20mm',
+            bottom: '25mm',
+            left: '20mm',
+        },
+        headerTemplate: data.headerTemplate,
+        footerTemplate: data.footerTemplate,
+    });
     await page.close();
 
     const end = new Date().getTime();
