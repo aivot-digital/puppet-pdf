@@ -56,6 +56,7 @@ app.post('/print', async (req, res) => {
             bottom: '25mm',
             left: '20mm',
         },
+        displayHeaderFooter: true,
         headerTemplate: data.headerTemplate,
         footerTemplate: data.footerTemplate,
     });
